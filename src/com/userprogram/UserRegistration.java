@@ -10,40 +10,47 @@ public class UserRegistration {
         String lastName = "Sharma";
         String email = "abc.xyz@bl.co.in";
         String mNumber = "91 8988373573";
-        String password = "A3gffkdhs";
-        System.out.println(validateFirstName(firstName));
-        System.out.println(validateLastName(lastName));
+        String password = "A3@gfkdhs";
+        System.out.println(validateName(firstName));
+        System.out.println(validateName(lastName));
         System.out.println(validateEmail(email));
         System.out.println(validatingMobile(mNumber));
         System.out.println(validatePassword(password));
     }
 
-    private static boolean validateFirstName(String firstName){
+    private static boolean validateName(String name){
         Pattern pattern = Pattern.compile("^[A-Z]{1}+[a-z]{2,}$");
-        Matcher matcher = pattern.matcher(firstName);
+        if (name == null) {
+            return false;
+        }
+        Matcher matcher = pattern.matcher(name);
         return matcher.matches();
     }
 
-    private static boolean validateLastName(String lastName){
-        Pattern pattern = Pattern.compile("^[A-Z]{1}[a-z]{2,}$");
-        Matcher matcher = pattern.matcher(lastName);
-        return matcher.matches();
-    }
 
     private static boolean validateEmail(String email){
         Pattern pattern = Pattern.compile("^[a-zA-Z]+[.][a-zA-Z]+@+[a-zA-Z]+[.][a-zA-Z]+[.][a-zA-Z]*$");
+        if (email == null) {
+            return false;
+        }
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
     }
 
     private static boolean validatingMobile(String mNumber){
         Pattern pattern = Pattern.compile("^[9][1]+\\s\\d{10}$");
+        if (mNumber == null) {
+            return false;
+        }
         Matcher matcher = pattern.matcher(mNumber);
         return matcher.matches();
     }
 
     private static boolean validatePassword(String password){
-        Pattern pattern = Pattern.compile("^(?=.*[A-Z])(?=.*\\d)[a-zA-Z0-9]{8,}$");
+        Pattern pattern = Pattern.compile("^(?=.*[#?!@$%^&*-])(?=.*[A-Z])(?=.*\\d)(?=.*[a-zA-Z]){8,}$");
+        if (password == null) {
+            return false;
+        }
         Matcher matcher = pattern.matcher(password);
         return matcher.matches();
     }
