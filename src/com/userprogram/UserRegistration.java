@@ -18,7 +18,7 @@ public class UserRegistration {
         System.out.println(validatePassword(password));
     }
 
-    private static boolean validateName(String name){
+    private static boolean validateName(String name) {
         Pattern pattern = Pattern.compile("^[A-Z]{1}+[a-z]{2,}$");
         if (name == null) {
             return false;
@@ -27,8 +27,7 @@ public class UserRegistration {
         return matcher.matches();
     }
 
-
-    private static boolean validateEmail(String email){
+    private static boolean validateEmail(String email) {
         Pattern pattern = Pattern.compile("^[a-zA-Z]+[.][a-zA-Z]+@+[a-zA-Z]+[.][a-zA-Z]+[.][a-zA-Z]*$");
         if (email == null) {
             return false;
@@ -37,7 +36,7 @@ public class UserRegistration {
         return matcher.matches();
     }
 
-    private static boolean validatingMobile(String mNumber){
+    private static boolean validatingMobile(String mNumber) {
         Pattern pattern = Pattern.compile("^[9][1]+\\s\\d{10}$");
         if (mNumber == null) {
             return false;
@@ -46,7 +45,7 @@ public class UserRegistration {
         return matcher.matches();
     }
 
-    private static boolean validatePassword(String password){
+    private static boolean validatePassword(String password) {
         Pattern pattern = Pattern.compile("^(?=.*[#?!@$%^&*-])(?=.*[A-Z])(?=.*\\d)(?=.*[a-zA-Z]){8,}$");
         if (password == null) {
             return false;
