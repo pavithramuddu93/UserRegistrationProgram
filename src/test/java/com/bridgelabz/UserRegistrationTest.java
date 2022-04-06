@@ -1,55 +1,136 @@
 package com.bridgelabz;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
+public class UserRegistrationTest {
 
-public class UserRegistrationTest extends TestCase {
+    static UserRegistration userRegistration;
 
-    public void givenFirstName_WhenProper_ShouldReturnTrue() {
-        UserRegistration userDetails=new UserRegistration();
-        boolean result=userDetails.firstName("Kiran");
-        Assert.assertEquals(true,result);
+    @BeforeAll
+    public static void beforeAll() {
+        userRegistration = new UserRegistration();
     }
 
-    public void givenLastName_WhenProper_ShouldReturnTrue() {
-        UserRegistration userDetails=new UserRegistration();
-        boolean result=userDetails.lastName("Hulawale");
-        Assert.assertEquals(true,result);
+    @Test
+        public void validateName_shouldReturnTrue_whenFirstLatterIsCapital() {
+        boolean result = userRegistration.validateName("Dhiraj");
+        assertTrue(result);
     }
 
-    public void givenMail_WhenProper_ShouldReturnTrue() {
-        UserRegistration userDetails=new UserRegistration();
-        boolean result=userDetails.validMail("abc-100@yahoo.com");
-        Assert.assertEquals(true,result);
+    @Test
+    public void validateName_shouldReturnFalse_whenNameFirstLatterIsSmall() {
+        boolean result = userRegistration.validateName("dhiraj");
+        assertFalse(result);
     }
 
-    public void givenMobileNumber_WhenProper_ShouldReturnTrue() {
-        UserRegistration userDetails=new UserRegistration();
-        boolean result=userDetails.validMobile("91 9657104407");
-        Assert.assertEquals(true,result);
+    @Test
+    public void validateName_shouldReturnTrue_whenNameStartsWithCapAndHasMini3Characters() {
+        boolean result = userRegistration.validateName("Dhi");
+        assertTrue(result);
     }
 
-    public void givenRuleOne_WhenProper_ShouldReturnTrue() {
-        UserRegistration userDetails=new UserRegistration();
-        boolean result=userDetails.ruleOne("abcdefgh");
-        Assert.assertEquals(true,result);
+    @Test
+    public void validateName_shouldReturnFalse_whenNameStartsWithCapAndHasLessThan3Characters() {
+        boolean result = userRegistration.validateName("Dh");
+        assertFalse(result);
     }
 
-    public void givenRuleTwo_WhenProper_ShouldReturnTrue() {
-        UserRegistration userDetails=new UserRegistration();
-        boolean result=userDetails.ruleTwo("aBcdefgh");
-        Assert.assertEquals(true,result);
+    @Test
+    public void validateName_shouldReturnFalse_whenNameIsNull() {
+        boolean result = userRegistration.validateName(null);
+        assertFalse(result);
     }
 
-    public void givenRuleThree_WhenProper_ShouldReturnTrue() {
-        UserRegistration userDetails=new UserRegistration();
-        boolean result=userDetails.ruleThird("Abcd1efg");
-        Assert.assertEquals(true,result);
+    @Test
+    public void validateEmail_shouldReturnFalse_whenEmailIsNull() {
+        boolean result = userRegistration.validateEmail(null);
+        assertFalse(result);
     }
 
-    public void givenRuleForth_WhenProper_ShouldReturnTrue() {
-        UserRegistration userDetails=new UserRegistration();
-        boolean result=userDetails.ruleFourth("P@ssw0rd");
-        Assert.assertEquals(true,result);
+    @Test
+    public void validateEmail_shouldReturnFalse_whenEmailMissAnyOfMandatoryParts() {
+        boolean result = userRegistration.validateEmail("@bl.co.in");
+        assertFalse(result);
     }
+
+    @Test
+    public void validateEmail_shouldReturnFalse_whenEmailMissATSIGN() {
+        boolean result = userRegistration.validateEmail("abc.xyz.co.in");
+        assertFalse(result);
+    }
+
+    @Test
+    public void validateEmail_shouldReturnTrue_whenEmailHasAllMandatoryParts() {
+        boolean result = userRegistration.validateEmail("abc.xyz@bl.co.in");
+        assertTrue(result);
+    }
+
+    @Test
+    public void validateMobile_shouldReturnFalse_whenMobileNumbersAreNull() {
+        boolean result = userRegistration.validatingMobile(null);
+        assertFalse(result);
+    }
+
+    @Test
+    public void validateMobile_shouldReturnFalse_whenCountryCodeIsMissing() {
+        boolean result = userRegistration.validatingMobile("8988373573");
+        assertFalse(result);
+    }
+
+    @Test
+    public void validateMobile_shouldReturnTrue_whenCountryCodeIsMentioned() {
+        boolean result = userRegistration.validatingMobile("91 8988373573");
+        assertTrue(result);
+    }
+
+    @Test
+    public void validateMobile_shouldReturnFalse_whenCountryCodeIsMentionedWithoutSpace() {
+        boolean result = userRegistration.validatingMobile("918988373573");
+        assertFalse(result);
+    }
+
+    @Test
+    public void validateMobile_shouldReturnFalse_whenNumbersIsLessInCount() {
+        boolean result = userRegistration.validatingMobile("91 89883");
+        assertFalse(result);
+    }
+
+    @Test
+    public void validatePassword_shouldReturnFalse_whenPasswordIsNull() {
+        boolean result = userRegistration.validatePassword(null);
+        assertFalse(result);
+    }
+
+    @Test
+    public void validatePassword_shouldReturnTrue_whenPasswordProper() {
+        boolean result = userRegistration.validatePassword("Ah5f@djs");
+        assertTrue(result);
+    }
+
+    @Test
+    public void validatePassword_shouldReturnFalse_whenPasswordMissUpperCaseCharacter() {
+        boolean result = userRegistration.validatePassword("as2@cfr");
+        assertFalse(result);
+    }
+
+    @Test
+    public void validatePassword_shouldReturnFalse_whenPasswordMissNumericCharacter() {
+        boolean result = userRegistration.validatePassword("Ah@jscfr");
+        assertFalse(result);
+    }
+
+    @Test
+    public void validatePassword_shouldReturnFalse_whenPasswordIsLessThan8Characters() {
+        boolean result = userRegistration.validatePassword("Ah@js");
+        assertFalse(result);
+    }
+
+    @Test
+    public void validatePassword_shouldReturnFalse_whenPasswordMissSpecialCharacter() {
+        boolean result = userRegistration.validatePassword("Ah5fkdjs");
+        assertFalse(result);
+    }
+
 }
