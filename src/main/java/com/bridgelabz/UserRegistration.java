@@ -10,124 +10,69 @@ public class UserRegistration {
      *
      * @param args
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ValidationException {
         Scanner scanner = new Scanner(System.in);
+        UserRegistration userRegistration = new UserRegistration();
 
         System.out.print("Enter First Name : ");
         String firstName = scanner.next();
-        System.out.println(validateName(firstName));
+        System.out.println(userRegistration.ValidationChecker.validate(RegexEnum.name.getRegex(), firstName));
 
         System.out.print("Enter Last Name : ");
         String lastName = scanner.next();
-        System.out.println(validateName(lastName));
+        System.out.println(userRegistration.ValidationChecker.validate(RegexEnum.name.getRegex(), lastName));
 
         System.out.print("Enter Email : ");
         String email = scanner.next();
-        System.out.println(validateEmail(email));
+        System.out.println(userRegistration.ValidationChecker.validate(RegexEnum.email.getRegex(), email));
 
-        System.out.print("Enter Mobile Number : ");
-        String mNumber = scanner.next();
-        System.out.println(validatingMobile(mNumber));
+        System.out.print("Enter Phone Number : ");
+        String pNumber = scanner.next();
+        System.out.println(userRegistration.ValidationChecker.validate(RegexEnum.phone.getRegex(), pNumber));
 
         System.out.print("Enter Password : ");
         String password = scanner.next();
-        System.out.println(validatePassword(password));
-    }
-
-    /**
-     * Method for validating the user first and last  name using regex.
-     *
-     * @param name : user input as first or last name
-     * @return : true or false
-     */
-    public static boolean validateName(String name) {
-        Pattern pattern = Pattern.compile("^[A-Z]{1}+[a-z]{2,}$");
-        if (name == null) {
-            return false;
-        }
-        Matcher matcher = pattern.matcher(name);
-        if (matcher.matches())
-            return true;
-        else
-            try {
-                throw new ValidationException("Invalid Name");
-            } catch (ValidationException e) {
-                e.printStackTrace();
-            }
-        return matcher.matches();
+        System.out.println(userRegistration.ValidationChecker.validate(RegexEnum.password.getRegex(), password));
     }
 
 
     /**
-     * Method for validating the user's email using regex
-     *
-     * @param email : user's email
-     * @return : true or false
-     */
-    public static boolean validateEmail(String email) {
-        Pattern pattern = Pattern.compile("^[a-zA-z0-9.+-]+[@]+[a-zA-z0-9]+[.]+[a-zA-z0-9.]{2,}$");
-        if (email == null) {
-            return false;
-        }
-        Matcher matcher = pattern.matcher(email);
-        if (matcher.matches())
-            return true;
-        else
-            try {
-                throw new ValidationException("Invalid Email");
-            } catch (ValidationException e) {
-                e.printStackTrace();
-            }
-        return matcher.matches();
-    }
-
-    /**
-     * Method for validating the user's mobile number using regex
-     *
-     * @param mNumber : User's mobile number
-     * @return : true or false
-     */
-    public static boolean validatingMobile(String mNumber) {
-        Pattern pattern = Pattern.compile("^[9][1]+\\s\\d{10}$");
-        if (mNumber == null) {
-            return false;
-        }
-        Matcher matcher = pattern.matcher(mNumber);
-        if (matcher.matches())
-            return true;
-        else
-            try {
-                throw new ValidationException("Invalid Mobile Number");
-            } catch (ValidationException e) {
-                e.printStackTrace();
-            }
-        return matcher.matches();
-    }
-
-    /**
-     * Method for validating the user's password using regex.
+     * Method for validating the user's first name, last name, email, password, and phone number using regex.
+     * For password :
      * Rule1 – minimum 8 characters
      * Rule2 – Should have at least 1 Upper Case - NOTE – All rules must be passed
      * Rule3 – Should have at least 1 numeric number in the password
      * Rule4 – Has exactly 1 Special Character
      *
-     * @param password : user password
-     * @return : true or false.
+     * @param regex : regular expression
+     * @param data : first name, last name, email, password, and phone number
+     * @return
+     * @throws ValidationException
      */
-    public static boolean validatePassword(String password) {
-        Pattern pattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$");
-        if (password == null) {
-            return false;
-        }
-        Matcher matcher = pattern.matcher(password);
-        if (matcher.matches())
-            return true;
-        else
-            try {
-                throw new ValidationException("Invalid Password");
-            } catch (ValidationException e) {
-                e.printStackTrace();
+    private boolean validator(String regex, String data) throws ValidationException {
+        try {
+            Pattern pattern = Pattern.compile(regex);
+            if (data == null) {
+                return false;
             }
-        return matcher.matches();
+            Matcher matcher = pattern.matcher(data);
+            if (matcher.matches())
+                return true;
+            else
+                throw new ValidationException("Invalid " + data);
+        } catch (ValidationException e) {
+            throw new ValidationException(e.getMessage());
+        }
     }
+
+    /**
+     * lambda function implication
+     */
+    public IValidateChecker ValidationChecker = (regex, data) -> {
+        try {
+            return validator(regex, data);
+        } catch (ValidationException e) {
+            throw new ValidationException(e.getMessage());
+        }
+    };
 }

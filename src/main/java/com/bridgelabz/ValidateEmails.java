@@ -1,18 +1,20 @@
 package com.bridgelabz;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.Scanner;
+
 
 public class ValidateEmails {
 
     /**
      * Method to ensure all the sample emails are valid, using regex.
      *
+     * @param regex : regular expression
      * @param email : sample emails
      * @return : True or False
      */
-    public static boolean validateEmails(String email) {
-        String regex = "^[a-zA-z0-9.+-]+[@]+[a-zA-z0-9]+[.]+[a-zA-z0-9.]{2,}$";
+    private boolean validateEmails(String regex, String email) throws ValidationException {
+
         Pattern pattern = Pattern.compile(regex);
         if (email == null) {
             return false;
@@ -21,18 +23,27 @@ public class ValidateEmails {
         if (matcher.matches())
             return true;
         else
-            try {
-                throw new ValidationException("Invalid Email");
-            } catch (ValidationException e) {
-                e.printStackTrace();
-            }
-        return matcher.matches();
+            throw new ValidationException("invalid Email");
+
     }
 
-    public static void main(String[] args) {
+
+    public IValidateChecker emailValidator = (regex, email) -> {
+        try {
+            return validateEmails(regex, email);
+        } catch (ValidationException e) {
+            throw new ValidationException(e.getMessage());
+        }
+    };
+
+
+    public static void main(String[] args) throws ValidationException {
         Scanner scanner = new Scanner(System.in);
+        ValidateEmails validateEmails = new ValidateEmails();
         System.out.print("Enter Email : ");
         String useInput = scanner.next();
-        System.out.println(validateEmails(useInput));
+
+        System.out.println(validateEmails.emailValidator.validate(RegexEnum.email.getRegex(), useInput));
+
     }
 }
